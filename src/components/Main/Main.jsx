@@ -5,8 +5,12 @@ import {
     Button,
     Tooltip
 } from 'antd'
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions/index';
 import { SendOutlined } from '@ant-design/icons'
 import io from 'socket.io-client'
+import moment from 'moment'
+import ChatBody from '../ChatBody/ChatBody';
 
 const socket = io.connect('http://localhost:4000')
 
@@ -16,20 +20,34 @@ const socket = io.connect('http://localhost:4000')
 //    chatData=[...chatData,payload]
 // })
 
-const Main = () => {
-    const [chat, setChat] = useState([])
+const Main = (props) => {
+    const [chat, setChat] = useState(props.chatData)
     const [form] = Form.useForm();
 
     useEffect(() => {
-        const addMessage = (msg) => setChat(chat => [...chat, msg])
-        socket.on('message', addMessage)
+        const addMessage = (msg) => {
+            const temp=[...chat,msg]
+            // debugger
+            // setChat(chat => [...chat, msg])
+            props.setChatBodyData(temp)
+        }
+        socket.on('message', (addMessage))
     }, [])
+
+    useEffect(()=>{
+        // console.log('props CHAT DATA' , props.chatData)
+        setChat(props.chatData)
+        // debugger
+    },[props])
+    // useEffect(()=>{
+    //     setChat(props.chatData)
+    // },[props])
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
     const handleSend = (event) => {
-        if(event.message)socket.emit("message", { message: event.message })
+        if(event.message)socket.emit("message", {user:"UserName","time":moment(Date()).format('ddd h:mm a'), message: event.message })
         form.resetFields()
     }
     return (
@@ -54,7 +72,8 @@ const Main = () => {
                         </Form.Item>
                     </div>
                 </Form>
-                <div className="chatBody">
+                {chat && <ChatBody chatData1={chat}/>}
+                {/* <div className="chatBody">
                     {chat &&
                         chat.map((e, index) => {
                            
@@ -76,10 +95,21 @@ const Main = () => {
                             
                         })
                     }
-                </div>
+                </div> */}
             </div>
         </>
     );
 }
 
-export default Main;
+const mapStateToProps = (state) => ({
+    chatData: state.chatBodyReducers.chatBodyData,
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setChatBodyData: (data) => dispatch(actions.setChatBodyData(data))
+    };
+  };
+  
+  export default (connect(mapStateToProps, mapDispatchToProps)(Main));
+  

@@ -1,0 +1,45 @@
+.sendBody{
+    background-color: #d4e1ec;
+    display:flex;
+    justify-content: center;
+    flex-direction: row;
+    .ant-form-item{
+        width:100%;
+    }
+}
+
+.oddRow{
+    background-color: #e1ebf2;
+    display:flex;
+    flex-direction: row;
+}
+.evenRow{
+    background-color: #ecf3f7;
+    display:flex;
+    flex-direction: row;
+}
+
+.userBody{
+    display:flex;
+    width:15%;
+    margin-left:10px;
+    margin-right:10px;
+    justify-content: space-evenly;
+    flex-direction: row;
+    &__userName{
+        width:50%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    &__dateClass{
+        color:#888888;
+        // background-color: black;
+    }
+}
+
+.messageBody{
+    width:80%;
+    overflow-wrap: break-word;
+    overflow:auto;
+}

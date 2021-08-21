@@ -1,11 +1,25 @@
 import Main from './components/Main/Main'
+import { withRouter , BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Provider,connect } from 'react-redux';
+import store from './redux/store/store';
+import * as actions from './redux/actions/index';
 
 function App() {
   return (
-    <div>
+    <Router>
+    <Provider store={store}>
       <Main/>
-    </div>
+    </Provider>
+    </Router>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
+
+export default (connect(mapStateToProps, mapDispatchToProps)(App));
